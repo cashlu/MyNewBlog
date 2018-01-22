@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load blog_tags %}
+
+{% block main %}
+    <!-- Articles -->
+    {% if error_msg %}
+        {{ error_msg }}
+    {% endif %}
+
+    {% for post in post_list %}
+        <div class="row">
+            <article class="col-xs-12">
+                <h2>
+                    <a style="TEXT-DECORATION:none" href="{{ post.get_absolute_url }}">
+                        # {{ post.title }}
+                    </a>
+                </h2>
+                <br>
+                <p>{{ post.excerpt }}...</p>
+                {#<p>{{ post.body|safe }}</p>#}
+                <br>
+                <p>
+                    <a style="TEXT-DECORATION:none" href="{{ post.get_absolute_url }}">
+                        <button class="btn btn-success btn-sm">Read More</button>
+                    </a>
+                </p>
+                <p class="pull-right">
+                    {% for tag in post.tags.all %}
+                        <a style="TEXT-DECORATION:none" href="{% url 'blog:tag' tag.pk %}">
+                            <span class="label label-default">
+                                {{ tag.name }}
+                            </span>&nbsp;
+                        </a>
+                    {% endfor %}
+                </p>
+
+                <ul class="list-inline">
+                    {# todo 这里的图标都得换 #}
+                    <li><a href="#">{{ post.created_time }}</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-comment"></span> {{ post.comment_set.count }}
+                        Comments</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-certificate"></span> {{ post.views }} Reads</a></li>
+                </ul>
+            </article>
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock %}
+
+
+

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block main %}
+    <article class="post post-{{ post.pk }}">
+        <header class="entry-header">
+            <h1 class="entry-title">{{ post.title }}</h1>
+            <div class="entry-meta">
+                <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                <span class="post-date"><a href="#"><time class="entry-date"
+                                                          datetime="{{ post.created_time }}">{{ post.created_time }}</time></a></span>
+                <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                <span class="comments-link"><a href="#">{{ comment_list|length }} 评论</a></span>
+                <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            <!--markdown转换显示标签的问题，加safe解决-->
+            {{ post.body|safe }}
+        </div>
+        <div class="widget-tag-cloud">
+            <ul>
+                标签：
+                {% for tag in post.tags.all %}
+                    <li>
+                        <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}</a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </article>
+    <section class="comment-area" id="comment-area">
+        <hr>
+        <h3>发表评论</h3>
+        <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">
+            {# CSRF, Cross Site Request Forgery, 跨站点伪造请求 #}
+            <!--
+            简单来说，就是每当用户第一次访问django站点时，django会生成一个taken，写入用户客户端的cookies中，
+            下次当相同用户的request请求进来时，要先验证这个taken，避免跨站伪造请求。
+            -->
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4">
+                    <!--
+                    这里的form.name.id_for_label，是获取了django自动生成的input标签的id，放在了label标签的for属性中，
+                    这样可以使两个标签关联起来，最大的好处就是增大了input的"点击域"，点击label标签的文字，input也可以获得焦点，
+                    这样做多用在radio或checkbox上，因为这些标签的控件比较小，不容易点击，关联label标签后，点击旁边的文字也可以
+                    获得焦点了。
+                    -->
+                    <label for="{{ form.name.id_for_label }}">名字:</label>
+                    {# 可以用下面这个标签来代替label标签，下面这个标签会自动关联，value会取model里的字段名。 #}
+                    {# {{ form.name.label_tag }}#}
+
+                    <!--这里并没有定义任何用于输入框的input标签，只是引用了模板变量。django自动生成了这些输入框。-->
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.email.id_for_label }}">邮箱:</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.url.id_for_label }}">URL:</label>
+                    <!--todo 怎么样可以让接受url的输入框不用输入协议名？-->
+                    {{ form.url }}
+                    {{ form.url.errors }}
+                </div>
+                <div class="col-md-12">
+                    <label for="{{ form.text.id_for_label }}">评论:</label>
+                    {{ form.text }}
+                    {{ form.text.errors }}
+                    <button class="comment-btn" type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="comment-list-panel">
+            <!--获取comment_list的长度-->
+            <!--todo 这个语法需要学习一下-->
+            {# 或者使用 {{ post.comment_set.count }} #}
+            <h3>评论列表，共 <span>{{ comment_list|length }}</span> 条评论</h3>
+            <ul class="comment-list list-unstyled">
+                {% for comment in comment_list %}
+                    <li class="comment-item">
+                        <span class="nickname">{{ comment.name }}</span>
+                        <time class="submit-date">{{ comment.created_time }}</time>
+                        <!--todo 在评论列表里，URL还没用到-->
+                        <div class="text">
+                            {{ comment.text }}
+                        </div>
+                    </li>
+                    <!--如果for循环为空-->
+                {% empty %}
+                    暂无评论
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block toc %}
+    <div class="widget widget-content">
+        <h3 class="widget-title">文章目录</h3>
+        {{ post.toc|safe }}
+    </div>
+{% endblock toc %}

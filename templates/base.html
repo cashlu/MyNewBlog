@@ -1,0 +1,150 @@
+{% load staticfiles %}
+{% load blog_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Cash的部落格</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'blog/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+    <link href="{% static 'blog/css/custom.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'blog/css_BAK/highlights/github.css' %}">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery -->
+    <script src="{% static 'blog/js/jquery-1.11.3.min.js' %}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport bug workaround -->
+    <script src="{% static 'blog/js/ie10-viewport-bug-workaround.js' %}"></script>
+    <!-- Placeholder Images -->
+    <script src="{% static 'blog/js/holder.min.js' %}"></script>
+
+    {# 搜索高亮的样式 #}
+    <style>
+        span.highlighted {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Logo and responsive toggle -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-globe"></span> Cash的部落格</a>
+        </div>
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="{% url 'blog:index' %}">Home</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+{#                <li class="dropdown">#}
+{#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"#}
+{#                       aria-expanded="false">Services <span class="caret"></span></a>#}
+{#                    <ul class="dropdown-menu" aria-labelledby="about-us">#}
+{#                        <li><a href="#">占位</a></li>#}
+{#                        <li><a href="#">占位</a></li>#}
+{#                        <li><a href="#">占位</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+            </ul>
+
+            <!-- Search -->
+            <form class="navbar-form navbar-right" id="searchform" role="search" method="get"
+                  action="{% url 'haystack_search' %}">
+                <div class="form-group">
+                    <input type="search" name="q" placeholder="搜索" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search
+                </button>
+            </form>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+<div class="container-fluid">
+
+    <!-- Center Column -->
+    <div class="col-sm-9">
+        {% block main %}
+        {% endblock %}
+    </div>
+    <!--/Center Column-->
+
+
+    <!-- Right Column -->
+    <div class="col-sm-3">
+        <!-- 分类 -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title"><span class="glyphicon glyphicon-modal-window"></span> 分类</h1>
+            </div>
+            {% get_categories as categories %}
+            <div class="list-group">
+                {% for category in categories %}
+                    <a href="{% url 'blog:category' category.pk %}" class="list-group-item">{{ category.name }}
+                        <span class="badge badge-primary badge-pill pull-right">{{ category.post_set.count }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 归档 -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title"><span class="glyphicon glyphicon-calendar"></span> 归档</h1>
+            </div>
+            {% archives as date_list %}
+            <div class="list-group">
+                {% for date in date_list %}
+                    <a href="{% url 'blog:archives' date.year date.month %}"
+                       class="list-group-item">
+                        {{ date.year }}年{{ date.month }}月</a>
+                    {# todo：加告归档计数 #}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!--/Right Column -->
+    <!--todo 标签云用label来做，有样式-->
+
+</div><!--/container-fluid-->
+
+<footer>
+    <div class="small-print">
+        <div class="container">
+            <p>Copyright &copy; Example.com 2015 </p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
