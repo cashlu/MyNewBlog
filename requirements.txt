@@ -1,0 +1,8 @@
+certifi==2017.11.5
+Django==2.0
+gunicorn==19.7.1
+Markdown==2.6.9
+Pygments==2.2.0
+pytz==2017.3
+uWSGI==2.0.15
+Whoosh==2.7.4
