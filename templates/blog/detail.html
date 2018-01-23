@@ -44,48 +44,48 @@
         </div>
     </form>
 
-{#    <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">#}
-        {# CSRF, Cross Site Request Forgery, 跨站点伪造请求 #}
-{#        <!--#}
-{#        简单来说，就是每当用户第一次访问django站点时，django会生成一个taken，写入用户客户端的cookies中，#}
-{#        下次当相同用户的request请求进来时，要先验证这个taken，避免跨站伪造请求。#}
-{#        -->#}
-{#        {% csrf_token %}#}
-{#        <div class="row">#}
-{#            <div class="col-md-4">#}
-{#                <!--#}
-{#                这里的form.name.id_for_label，是获取了django自动生成的input标签的id，放在了label标签的for属性中，#}
-{#                这样可以使两个标签关联起来，最大的好处就是增大了input的"点击域"，点击label标签的文字，input也可以获得焦点，#}
-{#                这样做多用在radio或checkbox上，因为这些标签的控件比较小，不容易点击，关联label标签后，点击旁边的文字也可以#}
-{#                获得焦点了。#}
-{#                -->#}
-{#                <label for="{{ form.name.id_for_label }}">名字:</label>#}
-                {# 可以用下面这个标签来代替label标签，下面这个标签会自动关联，value会取model里的字段名。 #}
-                {# {{ form.name.label_tag }}#}
-{##}
-{#                <!--这里并没有定义任何用于输入框的input标签，只是引用了模板变量。django自动生成了这些输入框。-->#}
-{#                {{ form.name }}#}
-{#                {{ form.name.errors }}#}
-{#            </div>#}
-{#            <div class="col-md-4">#}
-{#                <label for="{{ form.email.id_for_label }}">邮箱:</label>#}
-{#                {{ form.email }}#}
-{#                {{ form.email.errors }}#}
-{#            </div>#}
-{#            <div class="col-md-4">#}
-{#                <label for="{{ form.url.id_for_label }}">URL:</label>#}
-{#                <!--todo 怎么样可以让接受url的输入框不用输入协议名？-->#}
-{#                {{ form.url }}#}
-{#                {{ form.url.errors }}#}
-{#            </div>#}
-{#            <div class="col-md-12">#}
-{#                <label for="{{ form.text.id_for_label }}">评论:</label>#}
-{#                {{ form.text }}#}
-{#                {{ form.text.errors }}#}
-{#                <button class="comment-btn" type="submit">提交</button>#}
-{#            </div>#}
-{#        </div>#}
-{#    </form>#}
+    {#    <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">#}
+    {# CSRF, Cross Site Request Forgery, 跨站点伪造请求 #}
+    {#        <!--#}
+    {#        简单来说，就是每当用户第一次访问django站点时，django会生成一个taken，写入用户客户端的cookies中，#}
+    {#        下次当相同用户的request请求进来时，要先验证这个taken，避免跨站伪造请求。#}
+    {#        -->#}
+    {#        {% csrf_token %}#}
+    {#        <div class="row">#}
+    {#            <div class="col-md-4">#}
+    {#                <!--#}
+    {#                这里的form.name.id_for_label，是获取了django自动生成的input标签的id，放在了label标签的for属性中，#}
+    {#                这样可以使两个标签关联起来，最大的好处就是增大了input的"点击域"，点击label标签的文字，input也可以获得焦点，#}
+    {#                这样做多用在radio或checkbox上，因为这些标签的控件比较小，不容易点击，关联label标签后，点击旁边的文字也可以#}
+    {#                获得焦点了。#}
+    {#                -->#}
+    {#                <label for="{{ form.name.id_for_label }}">名字:</label>#}
+    {# 可以用下面这个标签来代替label标签，下面这个标签会自动关联，value会取model里的字段名。 #}
+    {# {{ form.name.label_tag }}#}
+    {##}
+    {#                <!--这里并没有定义任何用于输入框的input标签，只是引用了模板变量。django自动生成了这些输入框。-->#}
+    {#                {{ form.name }}#}
+    {#                {{ form.name.errors }}#}
+    {#            </div>#}
+    {#            <div class="col-md-4">#}
+    {#                <label for="{{ form.email.id_for_label }}">邮箱:</label>#}
+    {#                {{ form.email }}#}
+    {#                {{ form.email.errors }}#}
+    {#            </div>#}
+    {#            <div class="col-md-4">#}
+    {#                <label for="{{ form.url.id_for_label }}">URL:</label>#}
+    {#                <!--todo 怎么样可以让接受url的输入框不用输入协议名？-->#}
+    {#                {{ form.url }}#}
+    {#                {{ form.url.errors }}#}
+    {#            </div>#}
+    {#            <div class="col-md-12">#}
+    {#                <label for="{{ form.text.id_for_label }}">评论:</label>#}
+    {#                {{ form.text }}#}
+    {#                {{ form.text.errors }}#}
+    {#                <button class="comment-btn" type="submit">提交</button>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </form>#}
 
 
     <div class="comment-list-panel">
@@ -117,5 +117,13 @@
                 暂无评论
             {% endfor %}
         </ul>
+    </div>
+{% endblock %}
+{% block toc %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title"><span class="glyphicon glyphicon-calendar"></span> 目录</h1>
+        </div>
+        {{ post.toc|safe }}
     </div>
 {% endblock %}
