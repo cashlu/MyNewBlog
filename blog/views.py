@@ -153,7 +153,6 @@ class IndexView(ListView):
     # 每页显示的文章数
     paginate_by = 10
 
-    # todo 首页文章列表显示摘要不好看，暂时显示全文，看看能否实现像CSDN那样的效果
     def get_queryset(self):
         post_list = super().get_queryset()
         md = markdown.Markdown(extensions=[
